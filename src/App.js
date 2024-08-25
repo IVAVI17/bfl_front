@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Select from 'react-select';
 
 function App() {
   const [input, setInput] = useState('');
@@ -9,8 +10,8 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const parsedData = JSON.parse(input); // Parse the input JSON
-      const res = await axios.post('https://holistic-viridian-periwinkle.glitch.me/bfhl', { data: parsedData.data }, {
+      const parsedData = JSON.parse(input);
+      const res = await axios.post('https://holistic-viridian-periwinkle.glitch.me/bfhl', parsedData, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -22,9 +23,8 @@ function App() {
     }
   };
 
-  const handleSelectChange = (e) => {
-    const options = Array.from(e.target.selectedOptions, option => option.value);
-    setSelectedOptions(options);
+  const handleSelectChange = (selectedOptions) => {
+    setSelectedOptions(selectedOptions.map(option => option.value));
   };
 
   const renderResponse = () => {
@@ -57,6 +57,12 @@ function App() {
     );
   };
 
+  const filterOptions = [
+    { value: 'Numbers', label: 'Numbers' },
+    { value: 'Alphabets', label: 'Alphabets' },
+    { value: 'Highest lowercase alphabet', label: 'Highest lowercase alphabet' }
+  ];
+
   return (
     <div>
       <h1>BFHL Frontend</h1>
@@ -74,11 +80,13 @@ function App() {
 
       <div>
         <h3>Multi Filter</h3>
-        <select multiple={true} onChange={handleSelectChange}>
-          <option value="Numbers">Numbers</option>
-          <option value="Alphabets">Alphabets</option>
-          <option value="Highest lowercase alphabet">Highest lowercase alphabet</option>
-        </select>
+        <Select
+          isMulti
+          options={filterOptions}
+          onChange={handleSelectChange}
+          className="basic-multi-select"
+          classNamePrefix="select"
+        />
       </div>
 
       {renderResponse()}
