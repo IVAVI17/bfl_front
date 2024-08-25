@@ -30,7 +30,7 @@ function App() {
   const renderResponse = () => {
     if (!response) return null;
 
-    const { numbers, alphabets, highest_lowercase_alphabet } = response;
+    const { numbers = [], alphabets = [], highest_lowercase_alphabet = [] } = response;
 
     return (
       <div>
