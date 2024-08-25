@@ -10,7 +10,7 @@ function App() {
     e.preventDefault();
     try {
       const parsedData = JSON.parse(input);
-      const res = await axios.post('https://your-backend-url.com/bfhl', parsedData, {
+      const res = await axios.post('https://holistic-viridian-periwinkle.glitch.me/bfhl', parsedData, {
         headers: {
           'Content-Type': 'application/json'
         }
