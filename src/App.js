@@ -6,9 +6,13 @@ function App() {
   const [input, setInput] = useState('');
   const [response, setResponse] = useState(null);
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
     try {
       const parsedData = JSON.parse(input);
       const res = await axios.post('https://holistic-viridian-periwinkle.glitch.me/bfhl', parsedData, {
@@ -19,7 +23,9 @@ function App() {
       setResponse(res.data);
     } catch (error) {
       console.error('Error submitting data:', error);
-      setResponse({ is_success: false, message: 'Failed to submit data. Please check the JSON format.' });
+      setError('Failed to submit data. Please check the JSON format or try again later.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -28,9 +34,12 @@ function App() {
   };
 
   const renderResponse = () => {
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p style={{ color: 'red' }}>{error}</p>;
+
     if (!response) return null;
 
-    const { numbers = [], alphabets = [], highest_lowercase_alphabet = [] } = response;
+    const { numbers, alphabets, highest_lowercase_alphabet } = response;
 
     return (
       <div>
